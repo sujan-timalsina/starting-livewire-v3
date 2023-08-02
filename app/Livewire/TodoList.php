@@ -48,6 +48,8 @@ class TodoList extends Component
         $this->task = ''; // alternative $this->reset(['task','otherVariable']);
 
         $this->fetchTodos();
+
+        request()->session()->flash('success', 'Todo added successfully.');
     }
 
     function toggleStatus(Todo $todo)
@@ -56,6 +58,8 @@ class TodoList extends Component
         $todo->save();
 
         $this->fetchTodos();
+
+        request()->session()->flash('success', $todo->task.' status changed to '.$todo->status);
     }
 
     function delete(Todo $todo)
@@ -63,6 +67,8 @@ class TodoList extends Component
         $todo->delete();
 
         $this->fetchTodos();
+
+        request()->session()->flash('success', 'Todo deleted successfully.');
     }
 
     public function render()

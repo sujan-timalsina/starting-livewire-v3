@@ -1,6 +1,11 @@
 <div class="container mx-auto mt-8">
     {{-- A good traveler has no fixed plans and is not intent upon arriving. --}}
     <h1 class="text-2xl font-semibold mb-4">Livewire v3 Todo</h1>
+    @if(session()->has('success'))
+        <div class="bg-green-500 text-white p-4 rounded-lg mb-4 w-72">
+            {{ session('success') }}
+        </div>
+    @endif
     <div class="inline-block bg-gray-100 p-4 shadow rounded p-8">
         <!-- Todo Form -->
         <form id="todoForm" class="mb-8" wire:submit="addTodo">
