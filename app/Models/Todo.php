@@ -9,8 +9,12 @@ class Todo extends Model
 {
     use HasFactory;
 
+    // protected $guarded = []; // if we want to allow mass assignment, do this
+
     protected $fillable = [
-        'task',
-        'status'
+        // 'task',
+        // 'status'
+        'name',
+        'completed'
     ];
 }

@@ -4,75 +4,41 @@ namespace App\Livewire;
 
 use App\Models\Todo;
 use Livewire\Component;
+use Livewire\WithPagination;
 use Livewire\Attributes\Rule;
 
 class TodoList extends Component
 {
-    #[Rule('required|min:3|max:100')]
-    public $task;
-
-    public $todos;
+    use WithPagination;
     
-    function mount()
+    #[Rule('required|min:3|max:50')]
+    public $name;
+
+    public $search = '';
+
+    public function create()
     {
-        $this->fetchTodos();
+        // validate
+        // create the todo
+        // clear the input
+        // send flash message
+
+        $validated = $this->validateOnly('name'); // we have other properties like search which doesn't originates from create task form, so we only want to validate the name property
+
+        Todo::create($validated);
+
+        $this->reset('name');
+
+        session()->flash('message', 'Task created successfully!');
     }
-
-    function fetchTodos()
-    {
-        $this->todos = Todo::all()->reverse();
-    }
-
-    function addTodo()
-    {
-        // we can access the request() helper to validate or get the data from view
-        // $validated = request()->validate([
-        //     'task' => 'required|min:3|max:100'
-        // ]);
-        // Todo::create($validated);
-        // Todo::create([
-        //     'task' => $validated['task']
-        // ]);
-
-        // $todo = new Todo();
-        // $todo->task = $this->task;
-        // $todo->save();
-
-        // to validate from #[Rule()] we need to use validate() method
-        $validated = $this->validate();
-
-        Todo::create([
-            'task' => $validated['task']
-        ]);
-
-        $this->task = ''; // alternative $this->reset(['task','otherVariable']);
-
-        $this->fetchTodos();
-
-        request()->session()->flash('success', 'Todo added successfully.');
-    }
-
-    function toggleStatus(Todo $todo)
-    {
-        $todo->status = $todo->status === 'done' ? 'open' : 'done';
-        $todo->save();
-
-        $this->fetchTodos();
-
-        request()->session()->flash('success', $todo->task.' status changed to '.$todo->status);
-    }
-
-    function delete(Todo $todo)
-    {
-        $todo->delete();
-
-        $this->fetchTodos();
-
-        request()->session()->flash('success', 'Todo deleted successfully.');
-    }
-
+    
     public function render()
     {
-        return view('livewire.todo-list');
+        // $todos = Todo::where('name', 'like', '%'.$this->search.'%')->get();
+        $todos = Todo::latest()->paginate(5);
+
+        return view('livewire.todo-list',[
+            'todos' => $todos,
+        ]);
     }
 }

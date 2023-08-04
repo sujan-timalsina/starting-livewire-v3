@@ -15,4 +15,4 @@ use App\Livewire\TodoList;
 |
 */
 
-Route::get('/todos', TodoList::class);
+Route::get('/', TodoList::class);

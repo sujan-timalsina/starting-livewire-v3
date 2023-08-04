@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('todos', function (Blueprint $table) {
             $table->id();
-            $table->string('task');
-            $table->enum('status', ['open', 'done'])->default('open');
+            // $table->string('task');
+            // $table->enum('status', ['open', 'done'])->default('open');
+            $table->string('name');
+            $table->boolean('completed')->default(false);
             $table->timestamps();
         });
     }
